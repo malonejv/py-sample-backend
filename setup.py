@@ -6,12 +6,6 @@ with open("README.md", "r", encoding="utf-8") as fh1:
 #with open("CHANGELOG.txt", "r", encoding="utf-8") as fh2:
 #    change_log = fh2.read()
 
-classifiers = [
-    'Programming Language :: Python :: 3.9'
-    'Intended Audience :: Education',
-    'License :: OSI Approved :: MIT License'
-]
- 
 VERSION = '1.0.0'
 
 setup(name='sample-backend',
@@ -27,7 +21,6 @@ setup(name='sample-backend',
     author='Javier López Malone',
     author_email='malonejv@gmail.com',
     license='MIT', 
-    classifiers=classifiers,
     keywords=['todolist','todo'], 
     package_dir={"": "src"},
     packages=find_packages(where="src"),
