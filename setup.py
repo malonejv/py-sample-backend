@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as fh1:
 classifiers = [
     'Programming Language :: Python :: 3.9'
     'Intended Audience :: Education',
-    'License :: OSI Approved :: MIT License',
+    'License :: OSI Approved :: MIT License'
 ]
  
 VERSION = '1.0.0'
