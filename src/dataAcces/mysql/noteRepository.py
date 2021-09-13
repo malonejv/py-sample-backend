@@ -1,15 +1,12 @@
 import datetime
+from src.dataAcces.abstracts.noteRepository import NoteRepository
 from dataAcces.context import Context
 from entites.note import Note
 
-class NoteDA:
+class NoteDA(NoteRepository):
 
     def Insert(self, note):
-        #MYSQL
-        # sql = "INSERT INTO notas (id, titulo, descripcion, usuarioId, fecha) VALUES(NULL, %s, %s, %s, %s);"
-
-        #SQLITE
-        sql = "INSERT INTO notas (id, titulo, descripcion, usuarioId, fecha) VALUES(NULL, ?, ?, ?, ?);"
+        sql = "INSERT INTO notas (id, titulo, descripcion, usuarioId, fecha) VALUES(NULL, %s, %s, %s, %s);"
 
         try:
             fecha = datetime.date.today().strftime("%d/%m/%y")
@@ -26,11 +23,7 @@ class NoteDA:
         return result
     
     def Update(self, note):
-        #MYSQL
-        # sql = "UPDATE notas SET titulo = %s, descripcion = %s, fecha = %s WHERE id = %s;"
-
-        #SQLITE
-        sql = "UPDATE notas SET titulo = ?, descripcion = ?, fecha = ? WHERE id = ?;"
+        sql = "UPDATE notas SET titulo = %s, descripcion = %s, fecha = %s WHERE id = %s;"
 
         try:
             fecha = datetime.date.today().strftime("%d/%m/%y")
@@ -47,11 +40,7 @@ class NoteDA:
         return result
     
     def Delete(self, note):
-        #MYSQL
-        # sql = "DELETE FROM notas WHERE id = %s;"
-
-        #SQLITE
-        sql = "DELETE FROM notas WHERE id = ?;"
+        sql = "DELETE FROM notas WHERE id = %s;"
 
         try:
             params = (note.Id,)
@@ -67,12 +56,8 @@ class NoteDA:
         return result
     
     def GetById(self, id):
-        #MYSQL
-        # sql = "SELECT n.Id, n.titulo, n.descripcion, n.usuarioId FROM notas n WHERE n.id = %s;"
+        sql = "SELECT n.Id, n.titulo, n.descripcion, n.usuarioId FROM notas n WHERE n.id = %s;"
 
-        #SQLITE
-        sql = "SELECT n.Id, n.titulo, n.descripcion, n.usuarioId FROM notas n WHERE n.id = ?;"
-        
         params = (id,)
     
         context = Context()
@@ -84,12 +69,8 @@ class NoteDA:
         return resultDb
 
     def GetByUser(self, userId):
-        #MYSQL
-        # sql = "SELECT n.Id, n.titulo, n.descripcion, n.usuarioId FROM notas n WHERE n.usuarioId = %s;"
+        sql = "SELECT n.Id, n.titulo, n.descripcion, n.usuarioId FROM notas n WHERE n.usuarioId = %s;"
 
-        #SQLITE
-        sql = "SELECT n.Id, n.titulo, n.descripcion, n.usuarioId FROM notas n WHERE n.usuarioId = ?;"
-        
         params = (userId,)
     
         context = Context()

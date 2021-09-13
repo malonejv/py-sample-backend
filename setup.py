@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh1:
 #with open("CHANGELOG.txt", "r", encoding="utf-8") as fh2:
 #    change_log = fh2.read()
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 setup(name='sample-backend',
     version=VERSION,

@@ -1,5 +1,8 @@
+
 import os
-# from common.singleton import singleton
+import sys
+import json
+
 from infrastructure.singleton import singleton
 
 class ConfigKeys:
@@ -9,25 +12,28 @@ class ConfigKeys:
 
 @singleton
 class ConfigHelper:
-    
+    __CONFIG_FILE = 'config.json'
+
     __config = dict()
 
     def __init__(self):
-        #Ruta absoluta
-        configPath = os.path.abspath("../config.ini")
-        if not os.path.isfile(configPath):
-            configPath=os.path.abspath("./section22-TkinterMySql/config.ini")
+        application_path = self.__getAppPath()
+        configPath = os.path.join(application_path, self.__CONFIG_FILE)
+        self.__readConfig(configPath)
 
+    def __getAppPath(self):
+        # determine if application is a script file or frozen exe
+        if getattr(sys, 'frozen', False):
+            application_path = os.path.dirname(sys.executable)
+        elif __file__:
+            application_path = os.path.dirname(__file__)
 
-        f = open(configPath,"r")
+        return application_path
 
-        lines = f.readlines()
-        for line in lines:
-            if(not line.startswith("#")):
-                key,value = line.strip('\n\r\t').split("=")
-                self.__config.setdefault(key,value)
+    def __readConfig(self, configPath):
+        with open(configPath,"r") as f:
+            self.__config = json.load(f)
 
-        f.close()
 
     @classmethod
     def GetConfig(cls):

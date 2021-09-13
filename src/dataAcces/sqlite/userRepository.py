@@ -1,14 +1,11 @@
 import datetime
 import hashlib
+from dataAcces.abstracts.userRepository import UserRepository
 from dataAcces.context import Context
 
-class UserDA:
+class UserDA(UserRepository):
 
     def Insert(self, user):
-        #MYSQL
-        # sql = "INSERT INTO usuarios VALUES(NULL, %s, %s, %s, %s, %s);"
-
-        #SQLITE
         sql = "INSERT INTO usuarios VALUES(NULL, ?, ?, ?, ?, ?);"
 
         try:
@@ -30,23 +27,20 @@ class UserDA:
         return result
     
     def GetByEmailPassword(self, email, password):
-        #MYSQL
-        # sql = "SELECT id, nombres, apellidos, email FROM usuarios WHERE email = %s AND password = %s;"
-
-        #SQLITE
         sql = "SELECT id, nombres, apellidos, email FROM usuarios WHERE email = ? AND password = ?;"
 
+        try:
+            #Cifrar contraseña
+            hashedPass = hashlib.sha256()
+            hashedPass.update(password)
+
+            params = (email, hashedPass.hexdigest())
         
-        #Cifrar contraseña
-        hashedPass = hashlib.sha256()
-        hashedPass.update(password)
+            context = Context()
 
-        params = (email, hashedPass.hexdigest())
-    
-        context = Context()
-
-        context.Cursor.execute(sql, params)
-           
-        resultDb = context.Cursor.fetchone()
-
+            context.Cursor.execute(sql, params)
+            
+            resultDb = context.Cursor.fetchone()
+        except Exception as ex:
+            resultDb = None
         return resultDb
