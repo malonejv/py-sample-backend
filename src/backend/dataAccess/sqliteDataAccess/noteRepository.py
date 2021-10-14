@@ -1,10 +1,17 @@
 import datetime
-from src.dataAcces.abstracts.noteRepository import NoteRepository
-from dataAcces.context import Context
-from entites.note import Note
+from dataclasses import dataclass
+from sqlite3 import Connection
 
-class NoteDA(NoteRepository):
+from dataAccess.abstracts.noteRepository import NoteRepository
+from entities.note import Note
 
+
+@dataclass()
+class NoteRepository(NoteRepository):
+    """Note repository class"""
+
+    _context:Connection
+    
     def Insert(self, note):
         sql = "INSERT INTO notas (id, titulo, descripcion, usuarioId, fecha) VALUES(NULL, ?, ?, ?, ?);"
 
@@ -12,12 +19,10 @@ class NoteDA(NoteRepository):
             fecha = datetime.date.today().strftime("%d/%m/%y")
             params = (note.Title, note.Description, note.UserId, fecha)
         
-            context = Context()
+            self._context.cursor.execute(sql, params)
+            self._context.db.commit()
 
-            context.Cursor.execute(sql, params)
-            context.db.commit()
-
-            result = context.Cursor.rowcount
+            result = self._context.cursor.rowcount
         except Exception as ex:
             result = 0
         return result
@@ -29,12 +34,10 @@ class NoteDA(NoteRepository):
             fecha = datetime.date.today().strftime("%d/%m/%y")
             params = (note.Title, note.Description, fecha, note.Id)
         
-            context = Context()
+            self._context.cursor.execute(sql, params)
+            self._context.db.commit()
 
-            context.Cursor.execute(sql, params)
-            context.db.commit()
-
-            result = context.Cursor.rowcount
+            result = self._context.cursor.rowcount
         except Exception as ex:
             result = 0
         return result
@@ -45,12 +48,10 @@ class NoteDA(NoteRepository):
         try:
             params = (note.Id,)
         
-            context = Context()
+            self._context.cursor.execute(sql, params)
+            self._context.db.commit()
 
-            context.Cursor.execute(sql, params)
-            context.db.commit()
-
-            result = context.Cursor.rowcount
+            result = self._context.cursor.rowcount
         except Exception as ex:
             result = 0
         return result
@@ -60,11 +61,9 @@ class NoteDA(NoteRepository):
         
         params = (id,)
     
-        context = Context()
-
-        context.Cursor.execute(sql, params)
+        self._context.cursor.execute(sql, params)
            
-        resultDb = context.Cursor.fetchone()
+        resultDb = self._context.cursor.fetchone()
 
         return resultDb
 
@@ -73,10 +72,8 @@ class NoteDA(NoteRepository):
         
         params = (userId,)
     
-        context = Context()
-
-        context.Cursor.execute(sql, params)
+        self._context.cursor.execute(sql, params)
            
-        resultDb = context.Cursor.fetchall()
+        resultDb = self._context.cursor.fetchall()
 
         return resultDb

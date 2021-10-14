@@ -1,9 +1,11 @@
+from dataclasses import dataclass
 import datetime
 import hashlib
-from dataAcces.abstracts.userRepository import UserRepository
-from dataAcces.context import Context
+from dataAccess.abstracts.userRepository import UserRepository
 
-class UserDA(UserRepository):
+@dataclass()
+class UserRepository(UserRepository):
+    """User repository class"""
 
     def Insert(self, user):
         sql = "INSERT INTO usuarios VALUES(NULL, ?, ?, ?, ?, ?);"
@@ -16,12 +18,10 @@ class UserDA(UserRepository):
             fecha = datetime.date.today()
             params = (user.Name, user.LastName, user.Email, hashedPass.hexdigest(), fecha)
         
-            context = Context()
+            self._context.cursor.execute(sql, params)
+            self._context.db.commit()
 
-            context.Cursor.execute(sql, params)
-            context.db.commit()
-
-            result = context.Cursor.rowcount
+            result = self._context.cursor.rowcount
         except Exception as ex:
             result = 0
         return result
@@ -36,11 +36,9 @@ class UserDA(UserRepository):
 
             params = (email, hashedPass.hexdigest())
         
-            context = Context()
-
-            context.Cursor.execute(sql, params)
+            self._context.cursor.execute(sql, params)
             
-            resultDb = context.Cursor.fetchone()
+            resultDb = self._context.cursor.fetchone()
         except Exception as ex:
             resultDb = None
         return resultDb

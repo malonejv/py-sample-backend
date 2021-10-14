@@ -1,3 +1,4 @@
+import os
 from setuptools import find_packages, setup
 
 with open("README.md", "r", encoding="utf-8") as fh1:
@@ -6,9 +7,10 @@ with open("README.md", "r", encoding="utf-8") as fh1:
 #with open("CHANGELOG.txt", "r", encoding="utf-8") as fh2:
 #    change_log = fh2.read()
 
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 
-setup(name='sample-backend',
+setup(
+    name='sample_backend',
     version=VERSION,
     description='Sample backend for todo-list application',
     long_description=long_description,
@@ -25,4 +27,9 @@ setup(name='sample-backend',
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     python_requires=">=3.9",
+    classifiers=[
+         "Programming Language :: Python :: 3",
+         "License :: OSI Approved :: MIT License",
+         "Operating System :: OS Independent",
+     ],
 )
